@@ -52,7 +52,12 @@
         "ImageId": "ami-d05e75b8",
         "SubnetId": {
           "Ref": "PrivateSubnet"
-        }
+        },
+        "SecurityGroupIds": [
+          {
+            "Ref": "InstanceSecurityGroup"
+          }
+        ]
       },
       "Metadata": {
         "AWS::CloudFormation::Designer": {
@@ -102,7 +107,12 @@
         "ImageId": "ami-d05e75b8",
         "SubnetId": {
           "Ref": "PrivateSubnet"
-        }
+        },
+        "SecurityGroupIds": [
+          {
+            "Ref": "InstanceSecurityGroup"
+          }
+        ]
       },
       "Metadata": {
         "AWS::CloudFormation::Designer": {
@@ -452,7 +462,10 @@
         },
         "z": 3,
         "parent": "74dfa211-f0de-40ae-a823-1a0072f18e5f",
-        "embeds": []
+        "embeds": [],
+        "ismemberof": [
+          "300579c7-c0c8-4d7d-80d0-812011c5a7a3"
+        ]
       },
       "0b318dee-2465-43de-91ec-c8b8028406ff": {
         "size": {
@@ -465,7 +478,10 @@
         },
         "z": 3,
         "parent": "74dfa211-f0de-40ae-a823-1a0072f18e5f",
-        "embeds": []
+        "embeds": [],
+        "ismemberof": [
+          "300579c7-c0c8-4d7d-80d0-812011c5a7a3"
+        ]
       },
       "300579c7-c0c8-4d7d-80d0-812011c5a7a3": {
         "size": {
@@ -568,6 +584,24 @@
           "id": "74dfa211-f0de-40ae-a823-1a0072f18e5f"
         },
         "z": 12
+      },
+      "e0a89e5c-b537-4104-bda7-a4cf2910e844": {
+        "source": {
+          "id": "0b318dee-2465-43de-91ec-c8b8028406ff"
+        },
+        "target": {
+          "id": "300579c7-c0c8-4d7d-80d0-812011c5a7a3"
+        },
+        "z": 13
+      },
+      "1fda9703-4472-43a8-8f57-7fc2722d0096": {
+        "source": {
+          "id": "a1ee6f80-58ac-4a9b-92dd-8eeee83fb2aa"
+        },
+        "target": {
+          "id": "300579c7-c0c8-4d7d-80d0-812011c5a7a3"
+        },
+        "z": 14
       }
     }
   }
