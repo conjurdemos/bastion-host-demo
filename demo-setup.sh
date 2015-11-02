@@ -6,14 +6,13 @@ if [ ! -f /usr/local/bin/aws ]; then
     exit 1
 fi
 
-while test $# -gt 0; do
+if [ $# -gt 0 ]; then
+	while test $# -gt 0; do
         case "$1" in
                 -h|--help)
-                        echo "$package - attempt to capture frames"
+                        echo "$0 [arguments]"
                         echo " "
-                        echo "$package [options] application [arguments]"
-                        echo " "
-                        echo "options:"
+                        echo "arguments:"
                         echo "-h, --help                    show brief help"
                         echo "--dns-name=DOMAIN_DNS_NAME    Domain DNS name to use in AWS"
                         echo "--keypair=AWS_KEY_PAIR        AWS KeyPair to use"
@@ -33,20 +32,27 @@ while test $# -gt 0; do
                         shift
                         ;;
                 *)
-                        echo "$package - attempt to capture frames"
+                        echo "$0 [arguments]"
                         echo " "
-                        echo "$package [options] application [arguments]"
-                        echo " "
-                        echo "options:"
+                        echo "arguments:"
                         echo "-h, --help                    show brief help"
                         echo "--dns-name=DOMAIN_DNS_NAME    Domain DNS name to use in AWS"
                         echo "--keypair=AWS_KEY_PAIR        AWS KeyPair to use"
                         echo "--stack-name=CF_STACK_NAME     Cloud Formation Stack Name"
-                        break
+                        exit 1
                         ;;
         esac
-done
-
+    done
+else
+    echo "$0 [arguments]"
+    echo " "
+    echo "arguments:"
+    echo "-h, --help                    show brief help"
+    echo "--dns-name=DOMAIN_DNS_NAME    Domain DNS name to use in AWS"
+    echo "--keypair=AWS_KEY_PAIR        AWS KeyPair to use"
+    echo "--stack-name=CF_STACK_NAME     Cloud Formation Stack Name"
+	exit 1
+fi
 BASTION_TEMPLATE=${PWD}'/bastion-demo-cf-template.json'
 
 # Verify that script can find bastion demo CF template
