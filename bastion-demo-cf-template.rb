@@ -28,6 +28,18 @@ template do
         :MaxLength => 25,
         :AllowedPattern => '[a-zA-Z0-9]+\\..+'
 
+    parameter 'bastionHostFactoryToken',
+        :Description => 'Bastion Host-Factory Token',
+        :Type => 'String'
+
+    parameter 'clientAHostFactoryToken',
+        :Description => 'clientA Host-Factory Token',
+        :Type => 'String'
+
+    parameter 'clientBHostFactoryToken',
+        :Description => 'clientB Host-Factory Token',
+        :Type => 'String'
+
     resource 'conjurBastionServer', :Type => 'AWS::EC2::Instance', :Properties => {
         :KeyName => ref('KeyName'),
         :ImageId => 'ami-d05e75b8',
@@ -35,7 +47,7 @@ template do
         :SecurityGroupIds => ref('InstanceSecurityGroup'),
         :SubnetId => ref('PublicSubnet'),
         # Loads an external userdata script.
-        :UserData => base64(interpolate(file('userdata.sh')))
+        :UserData => base64(interpolate(file('userdata.sh'), tName: 'bastionHostFactoryToken'))
     }
 
     resource 'conjurVPC', :Type => 'AWS::EC2::VPC', :Properties => {
@@ -52,7 +64,7 @@ template do
         :SubnetId => ref('PrivateSubnet'),
         :SecurityGroupIds => ref('InstanceSecurityGroup'),
         # Loads an external userdata script.
-        :UserData => base64(interpolate(file('userdata.sh')))
+        :UserData => base64(interpolate(file('userdata.sh'), tName: 'clientAHostFactoryToken'))
     }
 
     resource 'clientB', :Type => 'AWS::EC2::Instance', :Properties => {
@@ -62,7 +74,7 @@ template do
         :SubnetId => ref('PrivateSubnet'),
         :SecurityGroupIds => ref('InstanceSecurityGroup'),
         # Loads an external userdata script.
-        :UserData => base64(interpolate(file('userdata.sh')))
+        :UserData => base64(interpolate(file('userdata.sh'), tName: 'clientBHostFactoryToken'))
     }
 
     resource 'VGWA6CCR', :Type => 'AWS::EC2::VPCGatewayAttachment', :Properties => {

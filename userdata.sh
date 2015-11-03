@@ -13,7 +13,8 @@
 
 set -e
 
-host_token={{ref('HostFactoryToken')}}
+tokenName="{{ locals[:tName] }}"
+host_token={{ ref("${tokenName}") }}
 host_id=$(curl http://169.254.169.254/latest/meta-data/instance-id)
 host_identity=/var/conjur/host-identity.json
 
