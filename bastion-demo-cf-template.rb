@@ -94,12 +94,12 @@ template do
 
     resource 'PrivateSubnet', :Type => 'AWS::EC2::Subnet', :Properties => {
         :VpcId => ref('conjurVPC'),
-        :CidrBlock": "10.0.1.0/24"
+        :CidrBlock => '10.0.1.0/24'
     }
 
     resource 'PublicSubnet', :Type => 'AWS::EC2::Subnet', :Properties => {
         :VpcId => ref('conjurVPC'),
-        :CidrBlock =>10.0.0.0/24'
+        :CidrBlock => '10.0.0.0/24'
     }, :DependsOn => [ 'PrivateSubnet' ]
 
     resource 'Route', :Type => 'AWS::EC2::Route', :Properties => {
@@ -131,3 +131,5 @@ template do
         :RouteTableId => ref('vpnRouteTable'),
         :SubnetId => ref('PrivateSubnet')
     }
+
+end.exec!
