@@ -53,7 +53,7 @@ conjur policy load --as-group v4/developers --collection ${CF_STACK} policy.rb
 layers=(
     conjurops:layer:$CF_STACK/bastion-host-demo/clientA
     conjurops:layer:$CF_STACK/bastion-host-demo/clientB
-    conjurops:layer:$CF_STACK/bastion-host-demo/bastionServer
+    conjurops:layer:$CF_STACK/bastion-host-demo/conjurBastionServer
 )
 
 for i in "${layers[@]}"; do

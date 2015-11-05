@@ -14,6 +14,22 @@
 set -e
 
 tokenName="{{ locals[:tName] }}"
+
+if [ $tokenName == 'conjurBastionHostFactoryToken' ]; then
+# Configure iptables
+/sbin/iptables -t nat -C POSTROUTING -o eth0 -s 10.0.0.0/24 -j MASQUERADE 2> /dev/null || /sbin/iptables -t nat -A POSTROUTING -o eth0 -s 10.0.0.0/24 -j MASQUERADE
+/sbin/iptables-save > /etc/sysconfig/iptables
+# Configure ip forwarding and redirects
+echo 1 >  /proc/sys/net/ipv4/ip_forward && echo 0 >  /proc/sys/net/ipv4/conf/eth0/send_redirects
+mkdir -p /etc/sysctl.d/
+cat <<EOF > /etc/sysctl.d/nat.conf
+net.ipv4.ip_forward = 1
+net.ipv4.conf.eth0.send_redirects = 0
+EOF
+else
+route add default gw {{ "Fn::GetAtt": [ "conjurBastionServer", "PrivateIp" ] }}
+fi
+
 host_token={{ ref("${tokenName}") }}
 host_id=$(curl http://169.254.169.254/latest/meta-data/instance-id)
 host_identity=/var/conjur/host-identity.json

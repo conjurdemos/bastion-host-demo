@@ -52,22 +52,8 @@ template do
         :SecurityGroupIds => ref('BastionNATSG'),
         :SubnetId => ref('PublicSubnet'),
         :SourceDestCheck => 'false',
-        :UserData => base64(join(
-                      "",
-                      "#!/bin/bash -v\n",
-                      "# Configure iptables\n",
-                      "/sbin/iptables -t nat -C POSTROUTING -o eth0 -s 10.0.0.0/24 -j MASQUERADE 2> /dev/null || /sbin/iptables -t nat -A POSTROUTING -o eth0 -s 10.0.0.0/24 -j MASQUERADE\n",
-                      "/sbin/iptables-save > /etc/sysconfig/iptables\n",
-                      "# Configure ip forwarding and redirects\n",
-                      "echo 1 >  /proc/sys/net/ipv4/ip_forward && echo 0 >  /proc/sys/net/ipv4/conf/eth0/send_redirects\n",
-                      "mkdir -p /etc/sysctl.d/\n",
-                      "cat <<EOF > /etc/sysctl.d/nat.conf\n",
-                      "net.ipv4.ip_forward = 1\n",
-                      "net.ipv4.conf.eth0.send_redirects = 0\n",
-                      "EOF\n"
-                      )),
         # Loads an external userdata script.
-        # :UserData => base64(interpolate(file('userdata.sh'), tName: 'bastionHostFactoryToken'))
+        :UserData => base64(interpolate(file('userdata.sh'), tName: 'conjurBastionHostFactoryToken'))
     }
 
     resource 'conjurVPC', :Type => 'AWS::EC2::VPC', :Properties => {
@@ -83,20 +69,8 @@ template do
         :ImageId => 'ami-d05e75b8',
         :SubnetId => ref('PublicSubnet'),
         :SecurityGroupIds => ref('vpnPrivateSG'),
-        :UserData => base64(join(
-                     "",
-                     "#!/bin/bash -v\n",
-                     "route add default gw ",
-                     {
-                     "Fn::GetAtt": [
-                     "conjurBastionServer",
-                     "PrivateIp"
-                     ]
-                     },
-                     "\n"
-        )),
         # Loads an external userdata script.
-        # :UserData => base64(interpolate(file('userdata.sh'), tName: 'clientAHostFactoryToken'))
+        :UserData => base64(interpolate(file('userdata.sh'), tName: 'clientAHostFactoryToken'))
     }, :DependsOn => ['conjurBastionServer']
 
     resource 'clientB', :Type => 'AWS::EC2::Instance', :Properties => {
@@ -105,20 +79,8 @@ template do
         :ImageId => 'ami-d05e75b8',
         :SubnetId => ref('PublicSubnet'),
         :SecurityGroupIds => ref('vpnPrivateSG'),
-        :UserData => base64(join(
-                     "",
-                     "#!/bin/bash -v\n",
-                     "route add default gw ",
-                     {
-                     "Fn::GetAtt": [
-                     "conjurBastionServer",
-                     "PrivateIp"
-                     ]
-                     },
-                     "\n"
-        )),
         # Loads an external userdata script.
-        # :UserData => base64(interpolate(file('userdata.sh'), tName: 'clientBHostFactoryToken'))
+        :UserData => base64(interpolate(file('userdata.sh'), tName: 'clientBHostFactoryToken'))
     }, :DependsOn => ['conjurBastionServer']
 
     resource 'VGWA6CCR', :Type => 'AWS::EC2::VPCGatewayAttachment', :Properties => {
