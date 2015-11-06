@@ -27,7 +27,7 @@ net.ipv4.ip_forward = 1
 net.ipv4.conf.eth0.send_redirects = 0
 EOF
 else
-route add default gw {{ "Fn::GetAtt": [ "conjurBastionServer", "PrivateIp" ] }}
+route add default gw {{ get_att("conjurBastionServer", "PrivateIp") }}
 fi
 
 host_token={{ ref("${tokenName}") }}
