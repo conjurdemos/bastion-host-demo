@@ -52,7 +52,6 @@ conjur policy load --as-group v4/developers --collection ${CF_STACK} policy.rb
 
 layers=(
     conjurops:layer:$CF_STACK/bastion-host-demo/clientA
-    conjurops:layer:$CF_STACK/bastion-host-demo/clientB
     conjurops:layer:$CF_STACK/bastion-host-demo/conjurBastionServer
 )
 
@@ -63,5 +62,10 @@ for i in "${layers[@]}"; do
         echo "Creating token for $factory_name"
         conjur hostfactory tokens create --duration-days 365 ${factory_name}
     fi
-
+    
 done
+
+clientAToken=`conjur hostfactory show ${CF_STACK}/bastion-host-demo/clientA_factory | jsonfield tokens.0.token`
+conjurBastionToken=`conjur hostfactory show ${CF_STACK}/bastion-host-demo/conjurBastionServer_factory | jsonfield tokens.0.token`
+
+
